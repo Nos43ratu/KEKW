@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+  </head>
+  <body style="height: 100vh; width: 100vw; margin: 0;">
+    <canvas id="canvas" style="height: 100vh; width: 100vw;"></canvas>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const item = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const dots = 500;
+      const centreX = window.innerWidth / 2;
+      const centreY = window.innerHeight / 2;
+      let settings = {
+        radius: 100,
+        period: 7,
+        amplitude: 50,
+        colorJump: 10,
+        startColor: 0,
+        numberOfCircles: 19,
+      };
+
+      var gui = new dat.GUI();
+      gui.add(settings, "amplitude", 20, 100);
+      gui.add(settings, "period", 0, 100).step(1);
+      gui.add(settings, "colorJump", 0, 50).step(1);
+      gui.add(settings, "startColor", 0, 200).step(1);
+
+      const DrawCircle = (radius, off, color) => {
+        item.fillStyle = color;
+        item.beginPath();
+        for (let i = 0; i <= dots; i++) {
+          let u = (i * 2 * Math.PI) / dots;
+          let sinRadius =
+            radius + settings.amplitude * Math.sin(u * settings.period + off);
+          let x = centreX + sinRadius * Math.cos(u);
+          let y = centreY + sinRadius * Math.sin(u);
+          if (i === 0) item.moveTo(x, y);
+          else item.lineTo(x, y);
+        }
+        item.closePath();
+        item.fill();
+      };
+
+      let time = 0;
+      const Draw = () => {
+        time++;
+        item.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        item.fillStyle = "black ";
+        item.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+        for (let i = 0; i < settings.numberOfCircles; i++) {
+          DrawCircle(
+            200 - i * 10,
+            (1000 * time) / (1000 + 50 * i),
+            `hsl(${i * settings.colorJump + settings.startColor} , 75%, 50%,1)`
+          );
+        }
+      };
+
+      const render = () => {
+        Draw();
+        window.requestAnimationFrame(render);
+      };
+      render();
+    </script>
+  </body>
+</html>

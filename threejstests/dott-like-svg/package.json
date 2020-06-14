@@ -1,0 +1,15 @@
+{
+  "name": "dott-like-svg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.117.1",
+    "three-orbitcontrols": "^2.110.3"
+  }
+}
